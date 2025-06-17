@@ -1,0 +1,7 @@
+{
+  "name": "aerocontrol-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
