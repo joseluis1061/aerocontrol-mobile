@@ -1,0 +1,202 @@
+.login-content {
+  --background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+  }
+}
+
+// Logo y título
+.logo-section {
+  text-align: center;
+  margin-bottom: 40px;
+
+  .logo-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3);
+
+    .logo-icon {
+      font-size: 40px;
+      color: white;
+    }
+  }
+
+  .app-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 8px 0;
+    letter-spacing: 1px;
+  }
+
+  .app-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    font-weight: 300;
+  }
+}
+
+// Formulario
+.login-form {
+  width: 100%;
+  max-width: 340px;
+
+  .input-item {
+    --background: rgba(255, 255, 255, 0.1);
+    --color: white;
+    --placeholder-color: rgba(255, 255, 255, 0.6);
+    --border-radius: 12px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --min-height: 56px;
+    margin-bottom: 16px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    &.ion-invalid {
+      --border-color: #e74c3c;
+      border-color: #e74c3c;
+    }
+
+    .input-icon {
+      color: rgba(255, 255, 255, 0.6);
+      margin-right: 12px;
+      font-size: 20px;
+    }
+
+    ion-input {
+      --color: white !important;
+      font-size: 16px;
+    }
+  }
+
+  .password-toggle {
+    --color: rgba(255, 255, 255, 0.6);
+    --padding: 8px;
+    margin: 0;
+
+    .toggle-icon {
+      font-size: 20px;
+    }
+  }
+
+  .error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: -12px;
+    margin-bottom: 16px;
+    margin-left: 16px;
+    font-weight: 500;
+  }
+
+  .login-button {
+    --background: linear-gradient(135deg, #27ae60, #2ecc71);
+    --color: white;
+    --border-radius: 12px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    margin-top: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+
+    &:not(.button-disabled):hover {
+      --background: linear-gradient(135deg, #229954, #27ae60);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+    }
+
+    &.button-disabled {
+      --background: rgba(255, 255, 255, 0.3);
+      --color: rgba(255, 255, 255, 0.6);
+    }
+
+    ion-spinner {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Credenciales de prueba
+.demo-credentials {
+  margin-top: 40px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  max-width: 340px;
+
+  h3 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 4px 0;
+    font-size: 12px;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .login-content .login-container {
+    padding: 16px;
+  }
+
+  .logo-section {
+    margin-bottom: 32px;
+
+    .logo-circle {
+      width: 70px;
+      height: 70px;
+
+      .logo-icon {
+        font-size: 35px;
+      }
+    }
+
+    .app-title {
+      font-size: 24px;
+    }
+  }
+
+  .login-form {
+    max-width: 100%;
+  }
+
+  .demo-credentials {
+    margin-top: 32px;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .login-content {
+    --background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+  }
+}

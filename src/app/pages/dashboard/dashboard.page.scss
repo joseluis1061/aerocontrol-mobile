@@ -1,0 +1,333 @@
+ion-content {
+  --background: #f8f9fa;
+}
+
+// Welcome Section
+.welcome-section {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  padding: 20px;
+  color: white;
+
+  .welcome-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .greeting {
+      flex: 1;
+
+      h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+      }
+
+      .current-date {
+        font-size: 14px;
+        opacity: 0.8;
+        margin: 0;
+        text-transform: capitalize;
+      }
+
+      .current-time {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 4px 0 0 0;
+        color: #27ae60;
+      }
+    }
+
+    .weather-widget {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .weather-icon {
+        font-size: 32px;
+        color: #f39c12;
+        margin-bottom: 4px;
+      }
+
+      .temperature {
+        font-size: 16px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// Stats Section
+.stats-section {
+  padding: 20px 16px;
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 16px 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+
+    .stat-card {
+      margin: 0;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      ion-card-content {
+        padding: 16px;
+
+        .stat-content {
+          display: flex;
+          align-items: center;
+
+          .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+
+            ion-icon {
+              font-size: 20px;
+              color: white;
+            }
+          }
+
+          .stat-info {
+            flex: 1;
+
+            .stat-value {
+              font-size: 24px;
+              font-weight: 700;
+              margin: 0 0 4px 0;
+              color: white;
+            }
+
+            .stat-title {
+              font-size: 12px;
+              margin: 0;
+              opacity: 0.9;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Flights Section
+.flights-section {
+  padding: 0 16px 20px;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0;
+    }
+  }
+
+  .flights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .flight-card {
+      margin: 0;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      }
+
+      ion-card-content {
+        padding: 16px;
+
+        .flight-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .flight-info {
+            flex: 1;
+
+            .flight-number {
+              display: flex;
+              align-items: center;
+              margin-bottom: 8px;
+
+              .flight-icon {
+                font-size: 16px;
+                color: #2c3e50;
+                margin-right: 8px;
+              }
+
+              .number {
+                font-weight: 600;
+                color: #2c3e50;
+                font-size: 16px;
+              }
+            }
+
+            .flight-route {
+              display: flex;
+              align-items: center;
+              margin-bottom: 4px;
+
+              .origin,
+              .destination {
+                font-weight: 600;
+                color: #2c3e50;
+                font-size: 14px;
+              }
+
+              .route-arrow {
+                margin: 0 8px;
+                font-size: 14px;
+                color: #27ae60;
+              }
+            }
+
+            .flight-time {
+              display: flex;
+              align-items: center;
+              color: #7f8c8d;
+              font-size: 14px;
+
+              ion-icon {
+                font-size: 14px;
+                margin-right: 4px;
+              }
+            }
+          }
+
+          .flight-status {
+            .status-chip {
+              --border-radius: 16px;
+              height: 28px;
+              font-size: 12px;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Quick Actions Section
+.quick-actions-section {
+  padding: 0 16px 20px;
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 16px 0;
+  }
+
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+
+    .quick-action-btn {
+      --border-radius: 12px;
+      --border-width: 1.5px;
+      --color: #2c3e50;
+      --border-color: #2c3e50;
+      height: 48px;
+      font-size: 14px;
+      font-weight: 600;
+
+      &:hover {
+        --background: rgba(44, 62, 80, 0.05);
+      }
+
+      ion-icon {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+// Bottom Tabs
+ion-tab-bar {
+  --background: white;
+  --border: 1px solid #e1e5e9;
+  padding-bottom: env(safe-area-inset-bottom);
+
+  ion-tab-button {
+    --color: #95a5a6;
+    --color-selected: #2c3e50;
+
+    ion-icon {
+      font-size: 22px;
+    }
+
+    ion-label {
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    &.tab-selected {
+      --color: #27ae60;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .quick-actions-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .welcome-section .welcome-content {
+    flex-direction: column;
+    text-align: center;
+
+    .weather-widget {
+      margin-top: 16px;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .quick-actions-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -1,0 +1,191 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Gestión de Aeropuertos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="addNewAirport()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" (click)="toggleViewMode()">
+        <ion-icon [name]="viewMode === 'grid' ? 'list' : 'grid'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Pull to refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="circles"
+      refreshingText="Actualizando aeropuertos...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Barra de búsqueda y filtros -->
+  <div class="search-filter-section">
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionInput)="onSearchChange($event)"
+      placeholder="Buscar aeropuertos..."
+      debounce="300"
+      show-clear-button="focus">
+    </ion-searchbar>
+
+    <!-- Filtros -->
+    <div class="filters-row">
+      <ion-item class="filter-item">
+        <ion-select
+          [(ngModel)]="selectedStatus"
+          (ionChange)="onFilterChange()"
+          placeholder="Estado"
+          interface="popover">
+          <ion-select-option value="">Todos</ion-select-option>
+          <ion-select-option
+            *ngFor="let status of statusOptions"
+            [value]="status.value">
+            {{ status.label }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="filter-item">
+        <ion-select
+          [(ngModel)]="selectedCountry"
+          (ionChange)="onFilterChange()"
+          placeholder="País"
+          interface="popover">
+          <ion-select-option value="">Todos</ion-select-option>
+          <ion-select-option
+            *ngFor="let country of countries"
+            [value]="country">
+            {{ country }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button
+        fill="clear"
+        size="small"
+        (click)="clearFilters()"
+        class="clear-filters-btn">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Contador de resultados -->
+  <div class="results-counter">
+    <ion-text color="medium">
+      <p>{{ filteredAirports.length }} aeropuerto(s) encontrado(s)</p>
+    </ion-text>
+  </div>
+
+  <!-- Lista/Grid de aeropuertos -->
+  <div class="airports-container" [class]="'view-' + viewMode">
+
+    <!-- Mensaje cuando no hay aeropuertos -->
+    <div *ngIf="filteredAirports.length === 0" class="no-airports">
+      <ion-icon name="business-outline" class="no-airports-icon"></ion-icon>
+      <h3>No se encontraron aeropuertos</h3>
+      <p>Intenta ajustar los filtros de búsqueda</p>
+    </div>
+
+    <!-- Cards de aeropuertos -->
+    <ion-card
+      *ngFor="let airport of filteredAirports"
+      class="airport-card"
+      (click)="onAirportAction(airport)">
+
+      <ion-card-content>
+        <div class="airport-content">
+
+          <!-- Header del aeropuerto -->
+          <div class="airport-header">
+            <div class="airport-code">
+              <ion-icon name="business" class="airport-icon"></ion-icon>
+              <span class="code">{{ airport.code }}</span>
+              <ion-chip
+                [color]="getStatusColor(airport.status)"
+                class="status-chip">
+                <ion-icon [name]="getStatusIcon(airport.status)"></ion-icon>
+                <ion-label>{{ airport.statusText }}</ion-label>
+              </ion-chip>
+            </div>
+          </div>
+
+          <!-- Nombre y ubicación -->
+          <div class="airport-info">
+            <h3 class="airport-name">{{ airport.name }}</h3>
+            <div class="airport-location">
+              <ion-icon name="location-outline"></ion-icon>
+              <span>{{ airport.city }}, {{ airport.country }}</span>
+            </div>
+          </div>
+
+          <!-- Estadísticas principales -->
+          <div class="airport-stats">
+            <div class="stat-item">
+              <div class="stat-value">{{ airport.todayFlights }}</div>
+              <div class="stat-label">Vuelos Hoy</div>
+            </div>
+
+            <div class="stat-item">
+              <div class="stat-value">{{ airport.destinations }}</div>
+              <div class="stat-label">Destinos</div>
+            </div>
+
+            <div class="stat-item">
+              <div
+                class="stat-value"
+                [style.color]="getOperationalColor(airport.operationalPercentage) === 'success' ? '#27ae60' : getOperationalColor(airport.operationalPercentage) === 'warning' ? '#f39c12' : '#e74c3c'">
+                {{ airport.operationalPercentage }}%
+              </div>
+              <div class="stat-label">Operativo</div>
+            </div>
+          </div>
+
+          <!-- Información adicional -->
+          <div class="airport-facilities" *ngIf="viewMode === 'list'">
+            <div class="facility-item">
+              <ion-icon name="airplane-outline"></ion-icon>
+              <span>{{ airport.runways }} pista(s)</span>
+            </div>
+
+            <div class="facility-item">
+              <ion-icon name="business-outline"></ion-icon>
+              <span>{{ airport.terminals }} terminal(es)</span>
+            </div>
+          </div>
+
+          <!-- Barra de progreso operacional -->
+          <div class="operational-progress">
+            <div class="progress-label">
+              <span>Estado Operacional</span>
+              <span class="progress-percentage">{{ airport.operationalPercentage }}%</span>
+            </div>
+            <ion-progress-bar
+              [value]="airport.operationalPercentage / 100"
+              [color]="getOperationalColor(airport.operationalPercentage)">
+            </ion-progress-bar>
+          </div>
+
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <!-- Botón flotante para agregar aeropuerto -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="secondary" (click)="addNewAirport()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
+
+<!-- Bottom Navigation Tabs -->
+<app-bottom-tabs [activeTab]="'airports'"></app-bottom-tabs>

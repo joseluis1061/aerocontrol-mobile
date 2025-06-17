@@ -1,0 +1,482 @@
+ion-content {
+  --background: #f8f9fa;
+}
+
+// Search Section
+.search-section {
+  padding: 16px;
+  background: white;
+  border-bottom: 1px solid #e1e5e9;
+
+  ion-searchbar {
+    --background: #f8f9fa;
+    --border-radius: 12px;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Filter Panel
+.filter-panel {
+  margin: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  ion-card-title {
+    font-size: 16px;
+    color: #2c3e50;
+  }
+
+  .filter-row {
+    margin-bottom: 12px;
+
+    ion-item {
+      --background: #f8f9fa;
+      --border-radius: 8px;
+      --padding-start: 16px;
+      --inner-padding-end: 16px;
+      margin-bottom: 8px;
+
+      ion-select {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .filter-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+
+    ion-button {
+      --border-radius: 8px;
+    }
+  }
+}
+
+// Results Counter
+.results-counter {
+  padding: 8px 16px;
+
+  p {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+
+// Programs List
+.programs-list {
+  padding: 0 16px 100px;
+
+  .program-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    ion-card-content {
+      padding: 20px;
+
+      .program-content {
+
+        // Header del programa
+        .program-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 16px;
+
+          .program-title {
+            display: flex;
+            align-items: center;
+            flex: 1;
+
+            .program-icon {
+              font-size: 18px;
+              color: #2c3e50;
+              margin-right: 8px;
+            }
+
+            .flight-number {
+              font-size: 18px;
+              font-weight: 700;
+              color: #2c3e50;
+              margin-right: 12px;
+            }
+
+            .status-chip {
+              --border-radius: 16px;
+              height: 28px;
+              font-size: 11px;
+              font-weight: 600;
+              margin-left: auto;
+
+              ion-icon {
+                font-size: 14px;
+                margin-right: 4px;
+              }
+            }
+          }
+
+          .airline {
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 500;
+            text-align: right;
+            margin-top: 4px;
+          }
+        }
+
+        // Ruta del programa
+        .program-route {
+          margin-bottom: 20px;
+
+          .route-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .departure,
+            .arrival {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+
+              .airport-code {
+                font-size: 16px;
+                font-weight: 700;
+                color: #2c3e50;
+                margin-bottom: 4px;
+              }
+
+              .time {
+                font-size: 12px;
+                color: #7f8c8d;
+                font-weight: 500;
+              }
+            }
+
+            .route-visual {
+              flex: 1;
+              margin: 0 16px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+
+              .route-line {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 4px;
+
+                .route-dot {
+                  font-size: 8px;
+                  color: #27ae60;
+                }
+
+                .line {
+                  height: 2px;
+                  background: linear-gradient(90deg, #27ae60, #2c3e50);
+                  flex: 1;
+                  margin: 0 4px;
+                }
+
+                .route-plane {
+                  font-size: 14px;
+                  color: #2c3e50;
+                  margin: 0 4px;
+                }
+              }
+
+              .duration {
+                font-size: 11px;
+                color: #7f8c8d;
+                font-weight: 500;
+              }
+            }
+          }
+        }
+
+        // Días de operación
+        .operation-days {
+          margin-bottom: 16px;
+          padding: 16px;
+          background: #f8f9fa;
+          border-radius: 8px;
+
+          .days-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+
+            ion-icon {
+              font-size: 16px;
+              margin-right: 8px;
+              color: #27ae60;
+            }
+          }
+
+          .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+
+            .day-chip {
+              padding: 6px 4px;
+              border-radius: 6px;
+              text-align: center;
+              font-size: 11px;
+              font-weight: 600;
+              transition: all 0.2s ease;
+
+              &.day-active {
+                background: #27ae60;
+                color: white;
+                box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
+              }
+
+              &.day-inactive {
+                background: #e9ecef;
+                color: #6c757d;
+              }
+            }
+          }
+
+          .operation-summary {
+            text-align: center;
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 500;
+          }
+        }
+
+        // Detalles del programa
+        .program-details {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 8px;
+
+          .detail-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #7f8c8d;
+
+            ion-icon {
+              font-size: 14px;
+              margin-right: 6px;
+              color: #2c3e50;
+            }
+
+            span {
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// No programs message
+.no-programs {
+  text-align: center;
+  padding: 60px 20px;
+
+  .no-programs-icon {
+    font-size: 64px;
+    color: #bdc3c7;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 18px;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 0;
+  }
+}
+
+// Floating Action Button
+ion-fab {
+  ion-fab-button {
+    --box-shadow: 0 4px 16px rgba(39, 174, 96, 0.4);
+
+    &:hover {
+      --box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+    }
+  }
+}
+
+// Bottom Tabs
+ion-tab-bar {
+  --background: white;
+  --border: 1px solid #e1e5e9;
+  padding-bottom: env(safe-area-inset-bottom);
+
+  ion-tab-button {
+    --color: #95a5a6;
+    --color-selected: #27ae60;
+
+    ion-icon {
+      font-size: 22px;
+    }
+
+    ion-label {
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    &.tab-selected {
+      --color: #27ae60;
+    }
+  }
+}
+
+// Status specific colors
+.status-chip {
+  &[color="success"] {
+    --background: rgba(39, 174, 96, 0.1);
+    --color: #27ae60;
+  }
+
+  &[color="danger"] {
+    --background: rgba(231, 76, 60, 0.1);
+    --color: #e74c3c;
+  }
+
+  &[color="warning"] {
+    --background: rgba(241, 196, 15, 0.1);
+    --color: #f39c12;
+  }
+
+  &[color="medium"] {
+    --background: rgba(149, 165, 166, 0.1);
+    --color: #95a5a6;
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .filter-row {
+    ion-item {
+      --padding-start: 12px;
+      --inner-padding-end: 12px;
+    }
+  }
+
+  .program-details {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+
+  .program-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+
+    .airline {
+      text-align: left !important;
+      margin-top: 8px !important;
+    }
+  }
+
+  .days-grid {
+    gap: 2px !important;
+
+    .day-chip {
+      padding: 4px 2px !important;
+      font-size: 10px !important;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .programs-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    .program-card {
+      margin-bottom: 0;
+    }
+  }
+
+  .filter-panel {
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+
+      ion-item {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .programs-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Animation for new programs
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.program-card {
+  animation: slideInUp 0.3s ease-out;
+}
+
+// Loading states
+.loading-skeleton {
+  .program-card {
+    ion-card-content {
+      .program-content {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+// Special styling for seasonal programs
+.program-card {
+  &.seasonal {
+    border-left: 4px solid #f39c12;
+  }
+
+  &.suspended {
+    border-left: 4px solid #e74c3c;
+
+    .program-content {
+      opacity: 0.7;
+    }
+  }
+}

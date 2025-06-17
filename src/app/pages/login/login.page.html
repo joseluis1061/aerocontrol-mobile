@@ -1,0 +1,89 @@
+<ion-content class="login-content" [fullscreen]="true">
+  <div class="login-container">
+
+    <!-- Logo y título -->
+    <div class="logo-section">
+      <div class="logo-circle">
+        <ion-icon name="airplane" class="logo-icon"></ion-icon>
+      </div>
+      <h1 class="app-title">AeroControl</h1>
+      <p class="app-subtitle">Sistema de Control de Vuelos</p>
+    </div>
+
+    <!-- Formulario de login -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+
+      <!-- Campo Email -->
+      <ion-item
+        class="input-item"
+        [class.ion-invalid]="email?.invalid && email?.touched"
+        lines="none">
+        <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+        <ion-input
+          formControlName="email"
+          type="email"
+          placeholder="Correo electrónico"
+          autocomplete="email"
+          inputmode="email">
+        </ion-input>
+      </ion-item>
+
+      <!-- Mensaje de error email -->
+      <div class="error-message" *ngIf="email?.invalid && email?.touched">
+        <span *ngIf="email?.errors?.['required']">El correo es requerido</span>
+        <span *ngIf="email?.errors?.['email']">Ingrese un correo válido</span>
+      </div>
+
+      <!-- Campo Contraseña -->
+      <ion-item
+        class="input-item"
+        [class.ion-invalid]="password?.invalid && password?.touched"
+        lines="none">
+        <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+        <ion-input
+          formControlName="password"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Contraseña"
+          autocomplete="current-password">
+        </ion-input>
+        <ion-button
+          fill="clear"
+          slot="end"
+          (click)="togglePasswordVisibility()"
+          class="password-toggle">
+          <ion-icon
+            [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+            class="toggle-icon">
+          </ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <!-- Mensaje de error contraseña -->
+      <div class="error-message" *ngIf="password?.invalid && password?.touched">
+        <span *ngIf="password?.errors?.['required']">La contraseña es requerida</span>
+        <span *ngIf="password?.errors?.['minlength']">Mínimo 6 caracteres</span>
+      </div>
+
+      <!-- Botón de login -->
+      <ion-button
+        type="submit"
+        expand="block"
+        class="login-button"
+        [disabled]="isLoading">
+        <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+        <span *ngIf="!isLoading">Ingresar</span>
+      </ion-button>
+
+    </form>
+
+    <!-- Credenciales de prueba -->
+    <div class="demo-credentials">
+      <ion-text color="medium">
+        <h3>Credenciales de prueba:</h3>
+        <p><strong>Email:</strong> {{"admin@aerocontrol.com"}}</p>
+        <p><strong>Contraseña:</strong> 123456</p>
+      </ion-text>
+    </div>
+
+  </div>
+</ion-content>

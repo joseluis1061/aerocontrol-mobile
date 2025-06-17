@@ -1,0 +1,438 @@
+ion-content {
+  --background: #f8f9fa;
+}
+
+// Search and Filter Section
+.search-filter-section {
+  background: white;
+  padding: 16px;
+  border-bottom: 1px solid #e1e5e9;
+
+  ion-searchbar {
+    --background: #f8f9fa;
+    --border-radius: 12px;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 12px;
+  }
+
+  .filters-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .filter-item {
+      --background: #f8f9fa;
+      --border-radius: 8px;
+      --padding-start: 12px;
+      --inner-padding-end: 12px;
+      --min-height: 40px;
+      flex: 1;
+
+      ion-select {
+        font-size: 14px;
+      }
+    }
+
+    .clear-filters-btn {
+      --color: #7f8c8d;
+      --padding: 8px;
+      min-width: 40px;
+      height: 40px;
+    }
+  }
+}
+
+// Results Counter
+.results-counter {
+  padding: 8px 16px;
+
+  p {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+
+// Airports Container
+.airports-container {
+  padding: 0 16px 100px;
+
+  // Grid View
+  &.view-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+
+    .airport-card {
+      margin: 0;
+    }
+  }
+
+  // List View
+  &.view-list {
+    .airport-card {
+      margin-bottom: 12px;
+
+      .airport-content {
+        .airport-stats {
+          grid-template-columns: repeat(4, 1fr) !important;
+        }
+
+        .airport-facilities {
+          display: flex !important;
+        }
+      }
+    }
+  }
+
+  .airport-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    ion-card-content {
+      padding: 20px;
+
+      .airport-content {
+
+        // Header del aeropuerto
+        .airport-header {
+          margin-bottom: 16px;
+
+          .airport-code {
+            display: flex;
+            align-items: center;
+
+            .airport-icon {
+              font-size: 20px;
+              color: #2c3e50;
+              margin-right: 8px;
+            }
+
+            .code {
+              font-size: 24px;
+              font-weight: 700;
+              color: #2c3e50;
+              margin-right: 12px;
+            }
+
+            .status-chip {
+              --border-radius: 16px;
+              height: 28px;
+              font-size: 11px;
+              font-weight: 600;
+              margin-left: auto;
+
+              ion-icon {
+                font-size: 14px;
+                margin-right: 4px;
+              }
+            }
+          }
+        }
+
+        // Información del aeropuerto
+        .airport-info {
+          margin-bottom: 16px;
+
+          .airport-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0 0 8px 0;
+            line-height: 1.3;
+          }
+
+          .airport-location {
+            display: flex;
+            align-items: center;
+            color: #7f8c8d;
+            font-size: 14px;
+
+            ion-icon {
+              font-size: 16px;
+              margin-right: 6px;
+              color: #2c3e50;
+            }
+          }
+        }
+
+        // Estadísticas del aeropuerto
+        .airport-stats {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+          margin-bottom: 16px;
+
+          .stat-item {
+            text-align: center;
+            padding: 12px 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+
+            .stat-value {
+              font-size: 18px;
+              font-weight: 700;
+              color: #2c3e50;
+              margin-bottom: 4px;
+            }
+
+            .stat-label {
+              font-size: 11px;
+              color: #7f8c8d;
+              font-weight: 500;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+          }
+        }
+
+        // Facilidades del aeropuerto
+        .airport-facilities {
+          display: none;
+          gap: 16px;
+          margin-bottom: 16px;
+
+          .facility-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #7f8c8d;
+
+            ion-icon {
+              font-size: 14px;
+              margin-right: 6px;
+              color: #2c3e50;
+            }
+          }
+        }
+
+        // Progreso operacional
+        .operational-progress {
+          .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 500;
+
+            .progress-percentage {
+              font-weight: 600;
+              color: #2c3e50;
+            }
+          }
+
+          ion-progress-bar {
+            height: 6px;
+            --border-radius: 3px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// No airports message
+.no-airports {
+  text-align: center;
+  padding: 60px 20px;
+
+  .no-airports-icon {
+    font-size: 64px;
+    color: #bdc3c7;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 18px;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 0;
+  }
+}
+
+// Floating Action Button
+ion-fab {
+  ion-fab-button {
+    --box-shadow: 0 4px 16px rgba(39, 174, 96, 0.4);
+
+    &:hover {
+      --box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+    }
+  }
+}
+
+// Bottom Tabs
+ion-tab-bar {
+  --background: white;
+  --border: 1px solid #e1e5e9;
+  padding-bottom: env(safe-area-inset-bottom);
+
+  ion-tab-button {
+    --color: #95a5a6;
+    --color-selected: #27ae60;
+
+    ion-icon {
+      font-size: 22px;
+    }
+
+    ion-label {
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    &.tab-selected {
+      --color: #27ae60;
+    }
+  }
+}
+
+// Status specific colors
+.status-chip {
+  &[color="success"] {
+    --background: rgba(39, 174, 96, 0.1);
+    --color: #27ae60;
+  }
+
+  &[color="warning"] {
+    --background: rgba(241, 196, 15, 0.1);
+    --color: #f39c12;
+  }
+
+  &[color="danger"] {
+    --background: rgba(231, 76, 60, 0.1);
+    --color: #e74c3c;
+  }
+
+  &[color="medium"] {
+    --background: rgba(149, 165, 166, 0.1);
+    --color: #95a5a6;
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .filters-row {
+    flex-direction: column !important;
+    gap: 8px !important;
+
+    .filter-item {
+      width: 100%;
+    }
+
+    .clear-filters-btn {
+      align-self: flex-end;
+    }
+  }
+
+  .airports-container {
+    &.view-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .airport-card {
+      .airport-content {
+        .airport-stats {
+          grid-template-columns: repeat(2, 1fr) !important;
+          gap: 8px !important;
+
+          .stat-item {
+            padding: 8px 6px !important;
+
+            .stat-value {
+              font-size: 16px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .airports-container {
+    &.view-grid {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    &.view-list {
+      .airport-card {
+        .airport-content {
+          .airport-stats {
+            grid-template-columns: repeat(5, 1fr) !important;
+          }
+        }
+      }
+    }
+  }
+
+  .filters-row {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .airports-container {
+    &.view-grid {
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+  }
+}
+
+// Animation for new airports
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.airport-card {
+  animation: slideInUp 0.3s ease-out;
+}
+
+// Loading states
+.loading-skeleton {
+  .airport-card {
+    ion-card-content {
+      .airport-content {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+// Progress bar colors
+ion-progress-bar {
+  &[color="success"] {
+    --progress-background: #27ae60;
+  }
+
+  &[color="warning"] {
+    --progress-background: #f39c12;
+  }
+
+  &[color="danger"] {
+    --progress-background: #e74c3c;
+  }
+}

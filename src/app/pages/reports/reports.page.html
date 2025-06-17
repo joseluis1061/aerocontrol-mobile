@@ -1,0 +1,208 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Reportes y Logs</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="showExportOptions()">
+        <ion-icon name="download"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" (click)="createCustomReport()">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Pull to refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="circles"
+      refreshingText="Actualizando reportes...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Sección de Reportes -->
+  <div class="reports-section">
+    <h2 class="section-title">
+      <ion-icon name="bar-chart"></ion-icon>
+      Reportes Disponibles
+    </h2>
+
+    <div class="reports-grid">
+      <ion-card
+        *ngFor="let report of reportCards"
+        class="report-card"
+        [color]="report.color"
+        (click)="onReportAction(report)">
+
+        <ion-card-content>
+          <div class="report-content">
+
+            <div class="report-header">
+              <ion-icon [name]="report.icon" class="report-icon"></ion-icon>
+              <div class="report-info">
+                <h3 class="report-title">{{ report.title }}</h3>
+                <p class="report-description">{{ report.description }}</p>
+              </div>
+            </div>
+
+            <div class="report-data" *ngIf="report.data">
+              <div class="data-summary">
+                <div class="data-item" *ngFor="let item of report.data | keyvalue">
+                  <span class="data-label">{{ item.key }}:</span>
+                  <span class="data-value">{{ item.value }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="report-footer">
+              <ion-chip class="type-chip" [color]="report.color">
+                <ion-icon [name]="report.type === 'chart' ? 'bar-chart' : report.type === 'table' ? 'list' : 'download'"></ion-icon>
+                <ion-label>{{ report.type === 'chart' ? 'Gráfico' : report.type === 'table' ? 'Tabla' : 'Exportar' }}</ion-label>
+              </ion-chip>
+              <span class="last-updated">{{ report.lastUpdated }}</span>
+            </div>
+
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Sección de Logs del Sistema -->
+  <div class="logs-section">
+    <h2 class="section-title">
+      <ion-icon name="list"></ion-icon>
+      Logs del Sistema
+    </h2>
+
+    <!-- Filtros de logs -->
+    <div class="logs-filters">
+      <ion-searchbar
+        [(ngModel)]="logSearchTerm"
+        (ionInput)="onLogSearchChange($event)"
+        placeholder="Buscar en logs..."
+        debounce="300"
+        show-clear-button="focus">
+      </ion-searchbar>
+
+      <div class="filters-row">
+        <ion-item class="filter-item">
+          <ion-select
+            [(ngModel)]="selectedLogLevel"
+            (ionChange)="onLogFilterChange()"
+            placeholder="Nivel"
+            interface="popover">
+            <ion-select-option value="">Todos los niveles</ion-select-option>
+            <ion-select-option
+              *ngFor="let level of logLevels"
+              [value]="level.value">
+              {{ level.label }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="filter-item">
+          <ion-select
+            [(ngModel)]="selectedModule"
+            (ionChange)="onLogFilterChange()"
+            placeholder="Módulo"
+            interface="popover">
+            <ion-select-option value="">Todos los módulos</ion-select-option>
+            <ion-select-option
+              *ngFor="let module of modules"
+              [value]="module">
+              {{ module }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-button
+          fill="clear"
+          size="small"
+          (click)="clearLogFilters()"
+          class="clear-filters-btn">
+          <ion-icon name="close" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Contador de logs -->
+    <div class="logs-counter">
+      <ion-text color="medium">
+        <p>{{ filteredLogs.length }} registro(s) encontrado(s)</p>
+      </ion-text>
+    </div>
+
+    <!-- Lista de logs -->
+    <div class="logs-list">
+
+      <!-- Mensaje cuando no hay logs -->
+      <div *ngIf="filteredLogs.length === 0" class="no-logs">
+        <ion-icon name="document-text-outline" class="no-logs-icon"></ion-icon>
+        <h3>No se encontraron registros</h3>
+        <p>Intenta ajustar los filtros de búsqueda</p>
+      </div>
+
+      <!-- Cards de logs -->
+      <ion-card
+        *ngFor="let log of filteredLogs"
+        class="log-card">
+
+        <ion-card-content>
+          <div class="log-content">
+
+            <div class="log-header">
+              <div class="log-level">
+                <ion-icon
+                  [name]="getLevelIcon(log.level)"
+                  [color]="getLevelColor(log.level)"
+                  class="level-icon">
+                </ion-icon>
+                <span class="level-text" [style.color]="getLevelColor(log.level) === 'success' ? '#27ae60' : getLevelColor(log.level) === 'warning' ? '#f39c12' : getLevelColor(log.level) === 'danger' ? '#e74c3c' : '#2c3e50'">
+                  {{ log.level.toUpperCase() }}
+                </span>
+              </div>
+
+              <div class="log-timestamp">
+                <ion-icon name="time-outline"></ion-icon>
+                <span>{{ log.timestamp }}</span>
+              </div>
+            </div>
+
+            <div class="log-info">
+              <h4 class="log-action">{{ log.action }}</h4>
+              <p class="log-details">{{ log.details }}</p>
+            </div>
+
+            <div class="log-meta">
+              <div class="meta-item">
+                <ion-icon name="person-outline"></ion-icon>
+                <span>{{ log.user }}</span>
+              </div>
+
+              <div class="meta-item">
+                <ion-icon name="apps-outline"></ion-icon>
+                <span>{{ log.module }}</span>
+              </div>
+
+              <div class="meta-item" *ngIf="log.ip">
+                <ion-icon name="globe-outline"></ion-icon>
+                <span>{{ log.ip }}</span>
+              </div>
+            </div>
+
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+  </div>
+
+</ion-content>
+
+<!-- Bottom Navigation Tabs -->
+<app-bottom-tabs [activeTab]="'reports'"></app-bottom-tabs>

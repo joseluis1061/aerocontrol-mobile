@@ -1,0 +1,236 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Programas de Vuelo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="addNewProgram()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" (click)="toggleFilters()">
+        <ion-icon name="filter"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Pull to refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="circles"
+      refreshingText="Actualizando programas...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Barra de búsqueda -->
+  <div class="search-section">
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionInput)="onSearchChange($event)"
+      placeholder="Buscar programas..."
+      debounce="300"
+      show-clear-button="focus">
+    </ion-searchbar>
+  </div>
+
+  <!-- Panel de filtros -->
+  <ion-card *ngIf="isFilterOpen" class="filter-panel">
+    <ion-card-header>
+      <ion-card-title>Filtros</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <div class="filter-row">
+        <ion-item>
+          <ion-select
+            [(ngModel)]="selectedAirline"
+            (ionChange)="onFilterChange()"
+            placeholder="Aerolínea">
+            <ion-select-option value="">Todas las aerolíneas</ion-select-option>
+            <ion-select-option
+              *ngFor="let airline of airlines"
+              [value]="airline">
+              {{ airline }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <div class="filter-row">
+        <ion-item>
+          <ion-select
+            [(ngModel)]="selectedStatus"
+            (ionChange)="onFilterChange()"
+            placeholder="Estado">
+            <ion-select-option value="">Todos los estados</ion-select-option>
+            <ion-select-option
+              *ngFor="let status of statusOptions"
+              [value]="status.value">
+              {{ status.label }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <div class="filter-row">
+        <ion-item>
+          <ion-select
+            [(ngModel)]="selectedOrigin"
+            (ionChange)="onFilterChange()"
+            placeholder="Origen">
+            <ion-select-option value="">Todos los orígenes</ion-select-option>
+            <ion-select-option
+              *ngFor="let airport of airports"
+              [value]="airport">
+              {{ airport }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <div class="filter-actions">
+        <ion-button
+          fill="clear"
+          size="small"
+          (click)="clearFilters()">
+          Limpiar filtros
+        </ion-button>
+        <ion-button
+          fill="solid"
+          size="small"
+          (click)="toggleFilters()">
+          Aplicar
+        </ion-button>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Contador de resultados -->
+  <div class="results-counter">
+    <ion-text color="medium">
+      <p>{{ filteredPrograms.length }} programa(s) encontrado(s)</p>
+    </ion-text>
+  </div>
+
+  <!-- Lista de programas -->
+  <div class="programs-list">
+
+    <!-- Mensaje cuando no hay programas -->
+    <div *ngIf="filteredPrograms.length === 0" class="no-programs">
+      <ion-icon name="calendar-outline" class="no-programs-icon"></ion-icon>
+      <h3>No se encontraron programas</h3>
+      <p>Intenta ajustar los filtros de búsqueda</p>
+    </div>
+
+    <!-- Cards de programas -->
+    <ion-card
+      *ngFor="let program of filteredPrograms"
+      class="program-card"
+      (click)="onProgramAction(program)">
+
+      <ion-card-content>
+        <div class="program-content">
+
+          <!-- Header del programa -->
+          <div class="program-header">
+            <div class="program-title">
+              <ion-icon name="calendar" class="program-icon"></ion-icon>
+              <span class="flight-number">{{ program.flightNumber }}</span>
+              <ion-chip
+                [color]="getStatusColor(program.status)"
+                class="status-chip">
+                <ion-icon [name]="getStatusIcon(program.status)"></ion-icon>
+                <ion-label>{{ program.statusText }}</ion-label>
+              </ion-chip>
+            </div>
+            <div class="airline">{{ program.airline }}</div>
+          </div>
+
+          <!-- Ruta del programa -->
+          <div class="program-route">
+            <div class="route-info">
+              <div class="departure">
+                <span class="airport-code">{{ program.origin }}</span>
+                <span class="time">{{ program.departureTime }}</span>
+              </div>
+
+              <div class="route-visual">
+                <div class="route-line">
+                  <ion-icon name="ellipse" class="route-dot"></ion-icon>
+                  <div class="line"></div>
+                  <ion-icon name="airplane" class="route-plane"></ion-icon>
+                  <div class="line"></div>
+                  <ion-icon name="ellipse" class="route-dot"></ion-icon>
+                </div>
+                <div class="duration">{{ program.duration }}</div>
+              </div>
+
+              <div class="arrival">
+                <span class="airport-code">{{ program.destination }}</span>
+                <span class="time">{{ program.arrivalTime }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Días de operación -->
+          <div class="operation-days">
+            <div class="days-header">
+              <ion-icon [name]="getFrequencyIcon(program.frequency)"></ion-icon>
+              <span>Días de operación</span>
+            </div>
+            <div class="days-grid">
+              <div
+                *ngFor="let day of weekDays"
+                [class]="'day-chip ' + getDayClass(program, day.key)"
+                [title]="day.fullName">
+                {{ day.label }}
+              </div>
+            </div>
+            <div class="operation-summary">
+              {{ getOperationDaysText(program) }}
+            </div>
+          </div>
+
+          <!-- Información adicional -->
+          <div class="program-details">
+            <div class="detail-item">
+              <ion-icon name="business-outline"></ion-icon>
+              <span>{{ program.aircraft }}</span>
+            </div>
+
+            <div class="detail-item">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>Desde: {{ program.effectiveFrom }}</span>
+            </div>
+
+            <div class="detail-item" *ngIf="program.effectiveTo">
+              <ion-icon name="calendar"></ion-icon>
+              <span>Hasta: {{ program.effectiveTo }}</span>
+            </div>
+
+            <div class="detail-item">
+              <ion-icon name="repeat-outline"></ion-icon>
+              <span>{{ program.frequency === 'daily' ? 'Diario' : program.frequency === 'weekly' ? 'Semanal' : 'Estacional' }}</span>
+            </div>
+          </div>
+
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <!-- Botón flotante para agregar programa -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="secondary" (click)="addNewProgram()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
+
+<!-- Bottom Navigation Tabs -->
+<app-bottom-tabs [activeTab]="'programs'"></app-bottom-tabs>

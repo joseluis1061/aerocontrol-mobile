@@ -1,0 +1,161 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Pull to refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="circles"
+      refreshingText="Actualizando...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Header con saludo y fecha -->
+  <div class="welcome-section">
+    <div class="welcome-content">
+      <div class="greeting">
+        <h2>Hola, {{ userName }}</h2>
+        <p class="current-date">{{ currentDate }}</p>
+        <p class="current-time">{{ currentTime }}</p>
+      </div>
+      <div class="weather-widget">
+        <ion-icon name="partly-sunny-outline" class="weather-icon"></ion-icon>
+        <span class="temperature">24°C</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadísticas principales -->
+  <div class="stats-section">
+    <h3 class="section-title">Resumen de Hoy</h3>
+    <div class="stats-grid">
+      <ion-card
+        *ngFor="let stat of flightStats"
+        class="stat-card"
+        [color]="stat.color"
+        (click)="onStatClick(stat)">
+        <ion-card-content>
+          <div class="stat-content">
+            <div class="stat-icon">
+              <ion-icon [name]="stat.icon"></ion-icon>
+            </div>
+            <div class="stat-info">
+              <h2 class="stat-value">{{ stat.value }}</h2>
+              <p class="stat-title">{{ stat.title }}</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Vuelos recientes -->
+  <div class="flights-section">
+    <div class="section-header">
+      <h3 class="section-title">Vuelos Recientes</h3>
+      <ion-button
+        fill="clear"
+        size="small"
+        routerLink="/flights">
+        Ver todos
+        <ion-icon name="chevron-forward" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="flights-list">
+      <ion-card
+        *ngFor="let flight of recentFlights"
+        class="flight-card"
+        (click)="onFlightClick(flight)">
+        <ion-card-content>
+          <div class="flight-content">
+
+            <!-- Información del vuelo -->
+            <div class="flight-info">
+              <div class="flight-number">
+                <ion-icon name="airplane" class="flight-icon"></ion-icon>
+                <span class="number">{{ flight.flightNumber }}</span>
+              </div>
+
+              <div class="flight-route">
+                <span class="origin">{{ flight.origin }}</span>
+                <ion-icon name="arrow-forward" class="route-arrow"></ion-icon>
+                <span class="destination">{{ flight.destination }}</span>
+              </div>
+
+              <div class="flight-time">
+                <ion-icon name="time-outline"></ion-icon>
+                <span>{{ flight.time }}</span>
+              </div>
+            </div>
+
+            <!-- Estado del vuelo -->
+            <div class="flight-status">
+              <ion-chip
+                [color]="getStatusColor(flight.status)"
+                class="status-chip">
+                <ion-label>{{ flight.statusText }}</ion-label>
+              </ion-chip>
+            </div>
+
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Accesos rápidos -->
+  <div class="quick-actions-section">
+    <h3 class="section-title">Accesos Rápidos</h3>
+    <div class="quick-actions-grid">
+
+      <ion-button
+        fill="outline"
+        class="quick-action-btn"
+        routerLink="/flights">
+        <ion-icon name="airplane" slot="start"></ion-icon>
+        Gestionar Vuelos
+      </ion-button>
+
+      <ion-button
+        fill="outline"
+        class="quick-action-btn"
+        routerLink="/airports">
+        <ion-icon name="business" slot="start"></ion-icon>
+        Aeropuertos
+      </ion-button>
+
+      <ion-button
+        fill="outline"
+        class="quick-action-btn"
+        routerLink="/programs">
+        <ion-icon name="calendar" slot="start"></ion-icon>
+        Programas
+      </ion-button>
+
+      <ion-button
+        fill="outline"
+        class="quick-action-btn"
+        routerLink="/reports">
+        <ion-icon name="bar-chart" slot="start"></ion-icon>
+        Reportes
+      </ion-button>
+
+    </div>
+  </div>
+
+</ion-content>
+
+<!-- Bottom Navigation Tabs -->
+<app-bottom-tabs [activeTab]="'dashboard'"></app-bottom-tabs>

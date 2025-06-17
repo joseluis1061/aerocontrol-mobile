@@ -35,3 +35,15 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+ion-fab {
+  &[vertical="bottom"] {
+    bottom: calc(55px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+ion-content {
+  --overflow: auto;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}

@@ -1,0 +1,216 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Gestión de Vuelos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="addNewFlight()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" (click)="toggleFilters()">
+        <ion-icon name="filter"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Pull to refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="circles"
+      refreshingText="Actualizando vuelos...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Barra de búsqueda -->
+  <div class="search-section">
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionInput)="onSearchChange($event)"
+      placeholder="Buscar vuelos..."
+      debounce="300"
+      show-clear-button="focus">
+    </ion-searchbar>
+  </div>
+
+  <!-- Panel de filtros -->
+  <ion-card *ngIf="isFilterOpen" class="filter-panel">
+    <ion-card-header>
+      <ion-card-title>Filtros</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <div class="filter-row">
+        <ion-item>
+          <ion-select
+            [(ngModel)]="selectedStatus"
+            (ionChange)="onFilterChange()"
+            placeholder="Estado">
+            <ion-select-option value="">Todos los estados</ion-select-option>
+            <ion-select-option
+              *ngFor="let status of statusOptions"
+              [value]="status.value">
+              {{ status.label }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <div class="filter-row">
+        <ion-item>
+          <ion-select
+            [(ngModel)]="selectedOrigin"
+            (ionChange)="onFilterChange()"
+            placeholder="Origen">
+            <ion-select-option value="">Todos los orígenes</ion-select-option>
+            <ion-select-option
+              *ngFor="let airport of airports"
+              [value]="airport">
+              {{ airport }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <div class="filter-row">
+        <ion-item>
+          <ion-select
+            [(ngModel)]="selectedDestination"
+            (ionChange)="onFilterChange()"
+            placeholder="Destino">
+            <ion-select-option value="">Todos los destinos</ion-select-option>
+            <ion-select-option
+              *ngFor="let airport of airports"
+              [value]="airport">
+              {{ airport }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <div class="filter-actions">
+        <ion-button
+          fill="clear"
+          size="small"
+          (click)="clearFilters()">
+          Limpiar filtros
+        </ion-button>
+        <ion-button
+          fill="solid"
+          size="small"
+          (click)="toggleFilters()">
+          Aplicar
+        </ion-button>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Contador de resultados -->
+  <div class="results-counter">
+    <ion-text color="medium">
+      <p>{{ filteredFlights.length }} vuelo(s) encontrado(s)</p>
+    </ion-text>
+  </div>
+
+  <!-- Lista de vuelos -->
+  <div class="flights-list">
+
+    <!-- Mensaje cuando no hay vuelos -->
+    <div *ngIf="filteredFlights.length === 0" class="no-flights">
+      <ion-icon name="airplane-outline" class="no-flights-icon"></ion-icon>
+      <h3>No se encontraron vuelos</h3>
+      <p>Intenta ajustar los filtros de búsqueda</p>
+    </div>
+
+    <!-- Cards de vuelos -->
+    <ion-card
+      *ngFor="let flight of filteredFlights"
+      class="flight-card"
+      (click)="onFlightAction(flight)">
+
+      <ion-card-content>
+        <div class="flight-content">
+
+          <!-- Header del vuelo -->
+          <div class="flight-header">
+            <div class="flight-number">
+              <ion-icon name="airplane" class="flight-icon"></ion-icon>
+              <span class="number">{{ flight.flightNumber }}</span>
+              <ion-chip
+                [color]="getStatusColor(flight.status)"
+                class="status-chip">
+                <ion-icon [name]="getStatusIcon(flight.status)"></ion-icon>
+                <ion-label>{{ flight.statusText }}</ion-label>
+              </ion-chip>
+            </div>
+            <div class="airline">{{ flight.airline }}</div>
+          </div>
+
+          <!-- Ruta del vuelo -->
+          <div class="flight-route">
+            <div class="route-info">
+              <div class="departure">
+                <span class="airport-code">{{ flight.origin }}</span>
+                <span class="time">{{ flight.departureTime }}</span>
+              </div>
+
+              <div class="route-visual">
+                <div class="route-line">
+                  <ion-icon name="ellipse" class="route-dot"></ion-icon>
+                  <div class="line"></div>
+                  <ion-icon name="airplane" class="route-plane"></ion-icon>
+                  <div class="line"></div>
+                  <ion-icon name="ellipse" class="route-dot"></ion-icon>
+                </div>
+              </div>
+
+              <div class="arrival">
+                <span class="airport-code">{{ flight.destination }}</span>
+                <span class="time">{{ flight.arrivalTime }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información adicional -->
+          <div class="flight-details">
+            <div class="detail-item">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>{{ flight.date }}</span>
+            </div>
+
+            <div class="detail-item">
+              <ion-icon name="people-outline"></ion-icon>
+              <span>{{ flight.emptySeats }} asientos libres</span>
+            </div>
+
+            <div class="detail-item">
+              <ion-icon name="business-outline"></ion-icon>
+              <span>{{ flight.aircraft }}</span>
+            </div>
+
+            <div class="detail-item" *ngIf="flight.gate">
+              <ion-icon name="location-outline"></ion-icon>
+              <span>Puerta {{ flight.gate }}</span>
+            </div>
+          </div>
+
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <!-- Botón flotante para agregar vuelo -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="secondary" (click)="addNewFlight()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
+
+<!-- Bottom Navigation Tabs -->
+<app-bottom-tabs [activeTab]="'flights'"></app-bottom-tabs>
